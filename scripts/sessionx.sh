@@ -7,7 +7,7 @@ source scripts/tmuxinator.sh
 
 get_sorted_sessions() {
 	last_session=$(tmux display-message -p '#{client_last_session}')
-	sessions=$(tmux list-sessions | sed -E 's/:.*$//' | grep -v "^$last_session$" )
+	sessions=$(tmux list-sessions | sed -E 's/:.*$//' | grep -v "^$last_session$")
 	echo -e "$sessions\n$last_session" | awk '!seen[$0]++'
 }
 
@@ -95,7 +95,7 @@ additional_input() {
 		fi
 		add_path() {
 			local path=$1
-			if ! grep -q "$(basename "$path")" <<< "$sessions"; then
+			if ! grep -q "$(basename "$path")" <<<"$sessions"; then
 				echo "$path"
 			fi
 		}
@@ -128,7 +128,7 @@ handle_output() {
 		if is_known_tmuxinator_template "$target"; then
 			tmuxinator start "$target"
 		elif test -d "$target"; then
-            tmux new-session -ds $(basename $target) -c "$target"
+			tmux new-session -ds $(basename $target) -c "$target"
 			target="$(basename $target)"
 		else
 			if [[ "$Z_MODE" == "on" ]]; then
@@ -176,7 +176,7 @@ handle_args() {
 	RENAME_SESSION_RELOAD='bash -c '\'' tmux list-sessions | sed -E "s/:.*$//"; '\'''
 	RENAME_SESSION="$bind_rename_session:execute($RENAME_SESSION_EXEC)+reload($RENAME_SESSION_RELOAD)"
 
-	HEADER="$bind_accept=󰿄  $bind_kill_session=󱂧  $bind_rename_session=󰑕  $bind_configuration_mode=󱃖  $bind_window_mode=   $bind_new_window=󰇘  $bind_back=󰌍  $bind_tree_mode=󰐆   $bind_scroll_up=  $bind_scroll_down= "
+	HEADER="$bind_accept=󰿄  $bind_kill_session=󱂧  $bind_rename_session=󰑕  $bind_window_mode=   $bind_tree_mode=󰐆 "
 
 	args=(
 		--bind "$TMUXINATOR_MODE"
